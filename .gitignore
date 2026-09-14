@@ -29,3 +29,7 @@ states/
 
 # VSCode settings
 .vscode/
+.agents/
+!.claude/skills
+.claude/
+!.claude/skills
