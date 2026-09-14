@@ -15,8 +15,6 @@
     "forge-std": "github:foundry-rs/forge-std#v1.16.2",
     "hardhat": "^3.16.0",
     "mocha": "^11.8.0",
-    "prettier": "^3.9.6",
-    "prettier-plugin-solidity": "^2.4.1",
     "typescript": "~6.0.3"
   }
 }

@@ -1,0 +1,12 @@
+{
+  "name": "dapp-learning",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write \"**/*.sol\"",
+    "format:check": "prettier --check \"**/*.sol\""
+  },
+  "devDependencies": {
+    "prettier": "^3.9.6",
+    "prettier-plugin-solidity": "^2.4.1"
+  }
+}
