@@ -1,6 +1,9 @@
 {
   "name": "dapp-learning",
   "private": true,
+  "workspaces": [
+    "destat-contract"
+  ],
   "scripts": {
     "format": "prettier --write \"**/*.sol\"",
     "format:check": "prettier --check \"**/*.sol\""

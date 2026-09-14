@@ -1,27 +1,43 @@
 # Node modules
-node_modules
-package-lock.json
-.env
+/node_modules
+*/node_modules
 
-# Hardhat files
-/cache
+# Compilation output
+/dist
+*/dist
+
+# pnpm deploy output
+/bundle
+*/bundle
+
+# Hardhat Build Artifacts
 /artifacts
+*/artifacts
 
-# TypeChain files
-/typechain
-/typechain-types
+# Hardhat compilation (v2) support directory
+/cache
+*/cache
 
-# Solidity-coverage files
+# Typechain output
+/types
+*/types
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Hardhat coverage reports
 /coverage
-/coverage.json
+*/coverage
 
-# Remix compiler artifacts
-**/artifacts/
-**/artifacts/**
+# Gas snapshot files
+/.gas-snapshot
+*/.gas-snapshot
 
-# Remix plugin state folders
-deps/
-states/
+# Snapshot cheatcodes output
+/snapshots
+*/snapshots
 
 # Debug info
 *.dbg.json
