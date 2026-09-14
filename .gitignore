@@ -29,6 +29,8 @@ states/
 
 # VSCode settings
 .vscode/
+
+# AI Agents
 .agents/
 !.claude/skills
 .claude/
