@@ -29,9 +29,8 @@ states/
 
 # VSCode settings
 .vscode/
+.prettierrc
 
 # AI Agents
 .agents/
-!.claude/skills
 .claude/
-!.claude/skills
