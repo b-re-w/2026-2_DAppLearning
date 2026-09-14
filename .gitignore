@@ -11,7 +11,7 @@ package-lock.json
 /typechain
 /typechain-types
 
-# solidity-coverage files
+# Solidity-coverage files
 /coverage
 /coverage.json
 
@@ -26,3 +26,6 @@ states/
 # Debug info
 *.dbg.json
 *.tsbuildinfo
+
+# VSCode settings
+.vscode/
