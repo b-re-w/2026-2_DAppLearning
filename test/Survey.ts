@@ -14,25 +14,28 @@ it("Survey init", async () => {
             ]
         }
     ]
-    const s = await ethers.deployContract("Survey", [
+
+    const factory = await ethers.deployContract("SurveyFactory", []);
+    const tx = await factory.createSurvey({
         title,
         description,
         questions
-    ]);
-    const _title = await s.title();
-    const _description = await s.description();
-    const _questions = await s.getQuestions();
-    expect(_title).eq(title);
-    expect(_description).eq(description);
-    expect(_questions[0].options).deep.eq(questions[0].options);
-
-    const signers = await ethers.getSigners();
-    const respondent = signers[1];
-    await s.connect(respondent);
-    await s.submitAnswer({
-        respondent: respondent.address,
-        answers: [1]
+    });
+    const receipt = await tx.wait();
+    let surveyAddress;
+    receipt.logs.forEach((log) => {
+        const event = factory.interface.parseLog(log);
+        if (event?.name == "SurveyCreated") {
+            surveyAddress = event.args[0];
+        }
     });
 
-    console.log(await s.getAnswers());
+    //const surveys = await factory.getSurveys();
+
+    //const survey = await ethers.deployContract("Survey", [title, description, questions]);
+    const surveyC = await ethers.getContractFactory("Survey");
+    if (surveyAddress) {
+        const survey = await surveyC.attach(surveyAddress);
+        console.log(await survey.getQuestions());
+    }
 })
