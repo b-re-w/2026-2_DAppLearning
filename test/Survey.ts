@@ -150,6 +150,10 @@ describe("SurveyFactory Contract", () => {
     });
 
     it("should store created surveys and return them from getSurveys", async () => {
-    // TODO: create multiple surveys and check getSurveys output
+        // create multiple surveys and check getSurveys output
+        await factory.createSurvey(sampleSurvey, { value: minPoolAmount * 2n });
+        await factory.createSurvey(sampleSurvey, { value: minPoolAmount * 2n });
+        const surveys = await factory.getSurveys();
+        expect(surveys.length).to.equal(2);
     });
 });
