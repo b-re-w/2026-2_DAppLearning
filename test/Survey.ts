@@ -139,7 +139,14 @@ describe("SurveyFactory Contract", () => {
     });
 
     it("should revert if reward amount per respondent is too small", async () => {
-    // TODO: expect revert when msg.value / targetNumber < min_reward_amount
+        // expect revert when msg.value / targetNumber < min_reward_amount
+        const tooLargeTargetNumber = minPoolAmount / minRewardAmount + 1n;
+        await expect(
+            factory.createSurvey(
+                { ...sampleSurvey, targetNumber: tooLargeTargetNumber },
+                { value: minPoolAmount }
+            )
+        ).to.be.revertedWith("Insufficient reward amount per respondent");
     });
 
     it("should store created surveys and return them from getSurveys", async () => {
