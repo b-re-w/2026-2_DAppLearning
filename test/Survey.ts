@@ -120,9 +120,15 @@ describe("SurveyFactory Contract", () => {
     });
 
     it("should create a new survey when valid values are provided", async () => {
-        // TODO: prepare SurveySchema and call createSurvey with msg.value
-        // TODO: check event SurveyCreated emitted
-        // TODO: check surveys array length increased
+        // prepare SurveySchema and call createSurvey with msg.value
+        const tx = factory.createSurvey(sampleSurvey, { value: minPoolAmount * 2n });
+
+        // check event SurveyCreated emitted
+        await expect(tx).to.emit(factory, "SurveyCreated");
+
+        // check surveys array length increased
+        const surveys = await factory.getSurveys();
+        expect(surveys.length).to.equal(1);
     });
 
     it("should revert if pool amount is too small", async () => {
