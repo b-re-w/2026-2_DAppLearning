@@ -14,6 +14,8 @@ struct Answer {
 contract Survey {
     string public title;
     string public description;
+    uint256 public targetNumber;
+    uint256 public rewardAmount;
     Question[] questions;
     Answer[] answers;
 
@@ -22,10 +24,13 @@ contract Survey {
     constructor(
         string memory _title,  // string is variable length which is critical to blockchain
         string memory _description,
+        uint256 _targetNumber,
         Question[] memory _questions
-    ) {
+    ) payable {
         title = _title;
         description = _description;
+        targetNumber = _targetNumber;
+        rewardAmount = msg.value / _targetNumber;
         for (uint i = 0; i < _questions.length; i++) {
             questions.push(
                 Question({
@@ -46,10 +51,15 @@ contract Survey {
             _answer.answers.length == questions.length,
             "Mismatched number of answers"
         );
+        require(
+            answers.length < targetNumber,
+            "This survey has been ended. No more answers are accepted."
+        );
 
         answers.push(
             Answer({respondent: _answer.respondent, answers: _answer.answers})
         );
+        payable(msg.sender).transfer(rewardAmount);  // reward
     }
 
     function getAnswers() external view returns (Answer[] memory) {

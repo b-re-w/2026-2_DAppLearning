@@ -6,18 +6,39 @@ import "./Survey.sol";
 struct SurveySchema {
     string title;
     string description;
+    uint256 targetNumber;
     Question[] questions;
 }
 
 event SurveyCreated(address surveyAddress);
 
 contract SurveyFactory {
+    uint256 min_pool_amount;
+    uint256 min_reward_amount;
     Survey[] surveys;
 
-    constructor() {}
+    // ex)
+    // min pool amount: 50 eth
+    // target respond number: 100
+    // reward: 50 eth / 100 = 0.5 eth
+    constructor(uint256 _min_pool_amount, uint256 _min_reward_amount) {
+        min_pool_amount = _min_pool_amount;
+        min_reward_amount = _min_reward_amount;
+    }
 
-    function createSurvey(SurveySchema calldata _survey) external {
-        Survey survey = new Survey(_survey.title, _survey.description, _survey.questions);
+    function createSurvey(SurveySchema calldata _survey) external payable {
+        require(
+            msg.value >= min_pool_amount,
+            "Insufficient pool amount for survey creation"
+        );
+        require(
+            msg.value / _survey.targetNumber >= min_reward_amount,
+            "Insufficient reward amount per respondent"
+        );
+
+        Survey survey = new Survey{value: msg.value}(
+            _survey.title, _survey.description, _survey.targetNumber, _survey.questions
+        );
         surveys.push(survey);
 
         emit SurveyCreated(address(survey));
