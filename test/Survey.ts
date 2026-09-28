@@ -132,7 +132,10 @@ describe("SurveyFactory Contract", () => {
     });
 
     it("should revert if pool amount is too small", async () => {
-    // TODO: expect revert when msg.value < min_pool_amount
+        // expect revert when msg.value < min_pool_amount
+        await expect(
+            factory.createSurvey(sampleSurvey, { value: minPoolAmount / 5n })  // smaller than min_pool_amount
+        ).to.be.revertedWith("Insufficient pool amount for survey creation");
     });
 
     it("should revert if reward amount per respondent is too small", async () => {
