@@ -63,19 +63,60 @@ it("Survey init", async () => {
 
 
 describe("SurveyFactory Contract", () => {
-    let factory, owner, respondent1, respondent2;
+    let factory: any, owner, respondent1, respondent2;
+
+    let minPoolAmount: bigint, minRewardAmount: bigint;
 
     beforeEach(async () => {
         const { ethers } = await network.connect();
         [owner, respondent1, respondent2] = await ethers.getSigners();
+
+        minPoolAmount = ethers.parseEther("50");
+        minRewardAmount = ethers.parseEther("0.1");
+
         factory = await ethers.deployContract("SurveyFactory", [
-            ethers.parseEther("50"), // min_pool_amount
-            ethers.parseEther("0.1"), // min_reward_amount
+            minPoolAmount,
+            minRewardAmount,
         ]);
     });
 
+    const targetNumber = 100;
+    const sampleSurvey = {
+        title: "막무가내 설문조사",
+        description: "중앙화된 설문조사로, 모든 데이터는 공개되지 않습니다.",
+        targetNumber: targetNumber,
+        questions: [
+            {
+                question: "누가 내 응답을 관리할 때 더 솔직할 수 있을까요?",
+                options: ["구글 폼 운영자", "탈 중앙화된 블록체인", "상관 없음"],
+            },
+        ],
+    };
+
     it("should deploy with correct minimum amounts", async () => {
-        // TODO: check min_pool_amount and min_reward_amount
+        // check min_pool_amount and min_reward_amount
+
+        // check min_pool_amount by giving less than min_pool_amount
+        await expect(
+            factory.createSurvey(sampleSurvey, {
+                value: minPoolAmount - 1n,
+            })
+        ).to.be.revertedWith("Insufficient pool amount for survey creation");
+
+        // check min_reward_amount by giving the smallest targetNumber that
+
+        const tooLargeTargetNumber = minPoolAmount / minRewardAmount + 1n;
+        await expect(
+            factory.createSurvey(
+                { ...sampleSurvey, targetNumber: tooLargeTargetNumber },
+                { value: minPoolAmount }
+            )
+        ).to.be.revertedWith("Insufficient reward amount per respondent");
+
+        // check valid case
+        await expect(
+            factory.createSurvey(sampleSurvey, { value: minPoolAmount })
+        ).to.emit(factory, "SurveyCreated");
     });
 
     it("should create a new survey when valid values are provided", async () => {
